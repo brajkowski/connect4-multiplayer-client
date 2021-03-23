@@ -1,0 +1,26 @@
+{
+  "name": "@brajkowski/connect4-multiplayer-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brajkowski/connect4-multiplayer-client.git"
+  },
+  "keywords": [
+    "connect4",
+    "multiplayer",
+    "client",
+    "ts",
+    "typescript"
+  ],
+  "author": "Brandon Rajkowski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brajkowski/connect4-multiplayer-client/issues"
+  },
+  "homepage": "https://github.com/brajkowski/connect4-multiplayer-client#readme"
+}
