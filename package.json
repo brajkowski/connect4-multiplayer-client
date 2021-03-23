@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/brajkowski/connect4-multiplayer-client#readme",
   "devDependencies": {
+    "@types/ws": "^7.4.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.2.3"
   },
