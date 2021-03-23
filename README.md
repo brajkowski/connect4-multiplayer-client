@@ -1,1 +1,1 @@
-# connect4-multiplayer-client
+# Connect 4 Multiplayer: Client
