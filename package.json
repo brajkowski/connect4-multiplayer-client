@@ -27,7 +27,8 @@
   },
   "homepage": "https://github.com/brajkowski/connect4-multiplayer-client#readme",
   "release": {
-    "branches": ["main", {"name": "beta", "prerelease": true}]
+    "branches": ["main", {"name": "beta", "prerelease": true}],
+    "dryRun": true
   },
   "publishConfig": {
     "access": "public"
