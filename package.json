@@ -26,9 +26,16 @@
     "url": "https://github.com/brajkowski/connect4-multiplayer-client/issues"
   },
   "homepage": "https://github.com/brajkowski/connect4-multiplayer-client#readme",
+  "release": {
+    "branches": ["main", {"name": "beta", "prerelease": true}]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@types/ws": "^7.4.0",
     "rimraf": "^3.0.2",
+    "semantic-release": "^17.4.2",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
   },
