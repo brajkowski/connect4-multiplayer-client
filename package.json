@@ -1,6 +1,5 @@
 {
   "name": "@brajkowski/connect4-multiplayer-client",
-  "version": "1.0.0",
   "description": "A websocket-based client that connects users to connect 4 multiplayer game sessions.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,8 +26,7 @@
   },
   "homepage": "https://github.com/brajkowski/connect4-multiplayer-client#readme",
   "release": {
-    "branches": ["main", {"name": "beta", "prerelease": true}],
-    "dryRun": true
+    "branches": ["main", {"name": "beta", "prerelease": true}]
   },
   "publishConfig": {
     "access": "public"
