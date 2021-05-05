@@ -14,12 +14,10 @@ function prompt(prompt: string): Promise<number> {
   );
 }
 
-function promptMoveLoop() {
+function promptMove() {
   prompt('Pending move, enter value 0-6: ').then((response) => {
-    console.log(response);
     isOwnerMove ? owner.makeMove(response) : opponent.makeMove(response);
     isOwnerMove = !isOwnerMove;
-    promptMoveLoop();
   });
 }
 
@@ -36,6 +34,17 @@ setTimeout(() => {
   owner.createSession(ownerUsername);
   owner.onSessionCreated((session) => {
     opponent.joinSession(session, opponentUsername);
-    promptMoveLoop();
+  });
+  owner.onOpponentJoin((username) => {
+    console.log(`${username} joined`);
+    promptMove();
+  });
+  owner.onOpponentMove((column) => {
+    console.log(`Opponent moved: ${column}`);
+    promptMove();
+  });
+  opponent.onOpponentMove((column) => {
+    console.log(`Owner moved: ${column}`);
+    promptMove();
   });
 }, 500);
