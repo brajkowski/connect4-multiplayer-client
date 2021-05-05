@@ -14,16 +14,13 @@ function prompt(prompt: string): Promise<number> {
   );
 }
 
-function promptMoveLoop() {
-  prompt('Pending move, enter value 1-7: ').then((response) => {
-    console.log(response);
+function promptMove() {
+  prompt('Pending move, enter value 0-6: ').then((response) => {
     isOwnerMove ? owner.makeMove(response) : opponent.makeMove(response);
     isOwnerMove = !isOwnerMove;
-    promptMoveLoop();
   });
 }
 
-const session = 'test-session';
 const ownerUsername = 'owner';
 const opponentUsername = 'opponent';
 const address = 'ws://localhost:8080';
@@ -34,9 +31,20 @@ owner.open(address);
 opponent.open(address);
 
 setTimeout(() => {
-  owner.createSession(session, ownerUsername);
+  owner.createSession(ownerUsername);
+  owner.onSessionCreated((session) => {
+    opponent.joinSession(session, opponentUsername);
+  });
+  owner.onOpponentJoin((username) => {
+    console.log(`${username} joined`);
+    promptMove();
+  });
+  owner.onOpponentMove((column) => {
+    console.log(`Opponent moved: ${column}`);
+    promptMove();
+  });
+  opponent.onOpponentMove((column) => {
+    console.log(`Owner moved: ${column}`);
+    promptMove();
+  });
 }, 500);
-setTimeout(() => {
-  opponent.joinSession(session, opponentUsername);
-  promptMoveLoop();
-}, 600);
