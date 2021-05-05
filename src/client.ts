@@ -1,11 +1,9 @@
-import WebSocket = require('ws');
 import {
   ClientAction,
   ClientPacket,
   ServerAction,
   ServerPacket,
 } from '@brajkowski/connect4-multiplayer-common';
-import { Data } from 'ws';
 
 export class Connect4Client {
   private ws: WebSocket;
@@ -17,7 +15,9 @@ export class Connect4Client {
 
   open(address: string) {
     this.ws = new WebSocket(address);
-    this.ws.on('message', this.onMessage.bind(this));
+    this.ws.onmessage = (event) => {
+      this.onMessage(event.data);
+    };
   }
 
   close() {
@@ -66,7 +66,7 @@ export class Connect4Client {
     this.onOpponentMoveCallback = callback;
   }
 
-  private onMessage(data: Data) {
+  private onMessage(data: any) {
     const packet: ServerPacket = JSON.parse(data.toString());
     switch (packet.action) {
       case ServerAction.SESSION_CREATED:
