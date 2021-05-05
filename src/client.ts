@@ -11,7 +11,9 @@ export class Connect4Client {
   private ws: WebSocket;
   private session: string;
   private user: string;
-  private sessionCreatedCallback: (newSessionName: string) => any;
+  private sessionCreatedCallback?: (sessionName: string) => any;
+  private onOpponentJoinCallback?: (username: string) => any;
+  private onOpponentMoveCallback?: (column: number) => any;
 
   open(address: string) {
     this.ws = new WebSocket(address);
@@ -52,17 +54,30 @@ export class Connect4Client {
     this.ws.send(JSON.stringify(packet));
   }
 
-  onSessionCreated(callback: (newSessionName: string) => any): void {
+  onSessionCreated(callback: (sessionName: string) => any): void {
     this.sessionCreatedCallback = callback;
+  }
+
+  onOpponentJoin(callback: (username: string) => any): void {
+    this.onOpponentJoinCallback = callback;
+  }
+
+  onOpponentMove(callback: (column: number) => any): void {
+    this.onOpponentMoveCallback = callback;
   }
 
   private onMessage(data: Data) {
     const packet: ServerPacket = JSON.parse(data.toString());
-    console.log(packet);
     switch (packet.action) {
       case ServerAction.SESSION_CREATED:
         this.session = packet.newSession;
-        this.sessionCreatedCallback(this.session);
+        this.sessionCreatedCallback?.(this.session);
+        break;
+      case ServerAction.OPPONENT_JOIN:
+        this.onOpponentJoinCallback?.(packet.user);
+        break;
+      case ServerAction.OPPONENT_MOVE:
+        this.onOpponentMoveCallback?.(packet.column);
         break;
     }
   }
