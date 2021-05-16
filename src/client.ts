@@ -15,6 +15,7 @@ export class Connect4Client {
   private onOpponentMoveCallback?: (column: number) => any;
   private onOpponentQuitCallback?: () => any;
   private onGameRestartCallback?: (thisClientStartsFirst: boolean) => any;
+  private onSessionEndedCallback?: () => any;
 
   open(address: string) {
     this.ws = new WebSocket(address);
@@ -81,6 +82,10 @@ export class Connect4Client {
     this.onGameRestartCallback = callback;
   }
 
+  onSessionEnded(callback: () => any): void {
+    this.onSessionEndedCallback = callback;
+  }
+
   private onMessage(data: any) {
     const packet: ServerPacket = JSON.parse(data.toString());
     switch (packet.action) {
@@ -102,6 +107,9 @@ export class Connect4Client {
         break;
       case ServerAction.GAME_RESTART:
         this.onGameRestartCallback?.(packet.thisClientStartsFirst);
+        break;
+      case ServerAction.SESSION_ENDED:
+        this.onSessionEndedCallback?.();
         break;
     }
   }
