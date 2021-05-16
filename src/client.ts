@@ -9,6 +9,7 @@ export class Connect4Client {
   private ws: WebSocket;
   private session: string;
   private user: string;
+  private onOpenCallback?: () => any;
   private sessionCreatedCallback?: (sessionName: string) => any;
   private joinedSessionCallback?: (opponentUsername: string) => any;
   private onOpponentJoinCallback?: (username: string) => any;
@@ -20,6 +21,9 @@ export class Connect4Client {
 
   open(address: string) {
     this.ws = new WebSocket(address);
+    this.ws.onopen = (event) => {
+      this.onOpenCallback?.();
+    };
     this.ws.onclose = (event) => {
       this.onCloseCallback?.();
     };
@@ -69,6 +73,10 @@ export class Connect4Client {
     };
     this.ws.send(JSON.stringify(packet));
     this.close();
+  }
+
+  onOpen(callback: () => any): void {
+    this.onOpenCallback = callback;
   }
 
   onSessionCreated(callback: (sessionName: string) => any): void {
