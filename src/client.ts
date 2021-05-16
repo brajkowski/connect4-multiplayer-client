@@ -58,6 +58,15 @@ export class Connect4Client {
     this.ws.send(JSON.stringify(packet));
   }
 
+  quit() {
+    const packet: ClientPacket = {
+      user: this.user,
+      action: ClientAction.QUIT,
+    };
+    this.ws.send(JSON.stringify(packet));
+    this.close();
+  }
+
   onSessionCreated(callback: (sessionName: string) => any): void {
     this.sessionCreatedCallback = callback;
   }
