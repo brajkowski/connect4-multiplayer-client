@@ -13,6 +13,7 @@ export class Connect4Client {
   private joinedSessionCallback?: (opponentUsername: string) => any;
   private onOpponentJoinCallback?: (username: string) => any;
   private onOpponentMoveCallback?: (column: number) => any;
+  private onOpponentQuitCallback?: () => any;
 
   open(address: string) {
     this.ws = new WebSocket(address);
@@ -71,6 +72,10 @@ export class Connect4Client {
     this.onOpponentMoveCallback = callback;
   }
 
+  onOpponentQuit(callback: () => any): void {
+    this.onOpponentQuitCallback = callback;
+  }
+
   private onMessage(data: any) {
     const packet: ServerPacket = JSON.parse(data.toString());
     switch (packet.action) {
@@ -80,11 +85,15 @@ export class Connect4Client {
         break;
       case ServerAction.JOINED_SESSION:
         this.joinedSessionCallback?.(packet.user);
+        break;
       case ServerAction.OPPONENT_JOIN:
         this.onOpponentJoinCallback?.(packet.user);
         break;
       case ServerAction.OPPONENT_MOVE:
         this.onOpponentMoveCallback?.(packet.column);
+        break;
+      case ServerAction.OPPONENT_QUIT:
+        this.onOpponentQuitCallback?.();
         break;
     }
   }
