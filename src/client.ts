@@ -103,12 +103,14 @@ export class Connect4Client {
         this.onOpponentMoveCallback?.(packet.column);
         break;
       case ServerAction.OPPONENT_QUIT:
+        this.close();
         this.onOpponentQuitCallback?.();
         break;
       case ServerAction.GAME_RESTART:
         this.onGameRestartCallback?.(packet.thisClientStartsFirst);
         break;
       case ServerAction.SESSION_ENDED:
+        this.close();
         this.onSessionEndedCallback?.();
         break;
     }
