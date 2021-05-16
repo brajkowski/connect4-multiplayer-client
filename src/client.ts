@@ -68,6 +68,7 @@ export class Connect4Client {
 
   quit() {
     const packet: ClientPacket = {
+      session: this.session,
       user: this.user,
       action: ClientAction.QUIT,
     };
