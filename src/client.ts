@@ -10,6 +10,7 @@ export class Connect4Client {
   private session: string;
   private user: string;
   private sessionCreatedCallback?: (sessionName: string) => any;
+  private joinedSessionCallback?: (opponentUsername: string) => any;
   private onOpponentJoinCallback?: (username: string) => any;
   private onOpponentMoveCallback?: (column: number) => any;
 
@@ -58,6 +59,10 @@ export class Connect4Client {
     this.sessionCreatedCallback = callback;
   }
 
+  onJoinedSession(callback: (opponentUsername: string) => any): void {
+    this.joinedSessionCallback = callback;
+  }
+
   onOpponentJoin(callback: (username: string) => any): void {
     this.onOpponentJoinCallback = callback;
   }
@@ -73,6 +78,8 @@ export class Connect4Client {
         this.session = packet.newSession;
         this.sessionCreatedCallback?.(this.session);
         break;
+      case ServerAction.JOINED_SESSION:
+        this.joinedSessionCallback?.(packet.user);
       case ServerAction.OPPONENT_JOIN:
         this.onOpponentJoinCallback?.(packet.user);
         break;
