@@ -45,6 +45,6 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
-    "@brajkowski/connect4-multiplayer-common": "^1.0.0-beta.6"
+    "@brajkowski/connect4-multiplayer-common": "^1.0.0-beta.8"
   }
 }
