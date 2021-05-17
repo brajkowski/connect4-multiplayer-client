@@ -12,6 +12,7 @@ export class Connect4Client {
   private onOpenCallback?: () => any;
   private sessionCreatedCallback?: (sessionName: string) => any;
   private joinedSessionCallback?: (opponentUsername: string) => any;
+  private sessionNotFoundCallback?: () => any;
   private onOpponentJoinCallback?: (username: string) => any;
   private onOpponentMoveCallback?: (column: number) => any;
   private onOpponentQuitCallback?: () => any;
@@ -88,6 +89,10 @@ export class Connect4Client {
     this.joinedSessionCallback = callback;
   }
 
+  onSessionNotFound(callback: () => any): void {
+    this.sessionNotFoundCallback = callback;
+  }
+
   onOpponentJoin(callback: (username: string) => any): void {
     this.onOpponentJoinCallback = callback;
   }
@@ -122,6 +127,8 @@ export class Connect4Client {
       case ServerAction.JOINED_SESSION:
         this.joinedSessionCallback?.(packet.user);
         break;
+      case ServerAction.SESSION_NOT_FOUND:
+        this.sessionNotFoundCallback?.();
       case ServerAction.OPPONENT_JOIN:
         this.onOpponentJoinCallback?.(packet.user);
         break;
