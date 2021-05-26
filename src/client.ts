@@ -46,8 +46,8 @@ export class Connect4Client {
     this.ws.send(JSON.stringify(packet));
   }
 
-  joinSession(session: string, username: string) {
-    this.sessionName = session;
+  joinSession(sessionName: string, username: string) {
+    this.sessionName = sessionName;
     this.username = username;
     const packet: ClientPacket = {
       session: this.sessionName,
