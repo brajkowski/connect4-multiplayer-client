@@ -5,6 +5,5 @@
     "declaration": true,
     "outDir": "./dist"
   },
-  "include": ["./src/**/*"],
-  "exclude": ["./src/main.ts"]
+  "include": ["./src/**/*"]
 }
