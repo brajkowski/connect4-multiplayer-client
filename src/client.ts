@@ -10,9 +10,9 @@ export class Connect4Client {
   private sessionName: string;
   private username: string;
   private onOpenCallback?: () => any;
-  private sessionCreatedCallback?: (sessionName: string) => any;
-  private joinedSessionCallback?: (opponentUsername: string) => any;
-  private sessionNotFoundCallback?: () => any;
+  private onSessionCreatedCallback?: (sessionName: string) => any;
+  private onSessionJoinedCallback?: (opponentUsername: string) => any;
+  private onSessionNotFoundCallback?: () => any;
   private onOpponentJoinCallback?: (username: string) => any;
   private onOpponentMoveCallback?: (column: number) => any;
   private onOpponentQuitCallback?: () => any;
@@ -82,15 +82,15 @@ export class Connect4Client {
   }
 
   onSessionCreated(callback: (sessionName: string) => any): void {
-    this.sessionCreatedCallback = callback;
+    this.onSessionCreatedCallback = callback;
   }
 
   onSessionJoined(callback: (opponentUsername: string) => any): void {
-    this.joinedSessionCallback = callback;
+    this.onSessionJoinedCallback = callback;
   }
 
   onSessionNotFound(callback: () => any): void {
-    this.sessionNotFoundCallback = callback;
+    this.onSessionNotFoundCallback = callback;
   }
 
   onOpponentJoin(callback: (username: string) => any): void {
@@ -122,13 +122,13 @@ export class Connect4Client {
     switch (packet.action) {
       case ServerAction.SESSION_CREATED:
         this.sessionName = packet.newSession;
-        this.sessionCreatedCallback?.(this.sessionName);
+        this.onSessionCreatedCallback?.(this.sessionName);
         break;
       case ServerAction.JOINED_SESSION:
-        this.joinedSessionCallback?.(packet.user);
+        this.onSessionJoinedCallback?.(packet.user);
         break;
       case ServerAction.SESSION_NOT_FOUND:
-        this.sessionNotFoundCallback?.();
+        this.onSessionNotFoundCallback?.();
         break;
       case ServerAction.OPPONENT_JOIN:
         this.onOpponentJoinCallback?.(packet.user);
