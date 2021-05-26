@@ -8,7 +8,7 @@ import {
 export class Connect4Client {
   private ws: WebSocket;
   private session: string;
-  private user: string;
+  private username: string;
   private onOpenCallback?: () => any;
   private sessionCreatedCallback?: (sessionName: string) => any;
   private joinedSessionCallback?: (opponentUsername: string) => any;
@@ -38,9 +38,9 @@ export class Connect4Client {
   }
 
   createSession(user: string) {
-    this.user = user;
+    this.username = user;
     const packet: ClientPacket = {
-      user: this.user,
+      user: this.username,
       action: ClientAction.CREATE_SESSION,
     };
     this.ws.send(JSON.stringify(packet));
@@ -48,10 +48,10 @@ export class Connect4Client {
 
   joinSession(session: string, user: string) {
     this.session = session;
-    this.user = user;
+    this.username = user;
     const packet: ClientPacket = {
       session: this.session,
-      user: this.user,
+      user: this.username,
       action: ClientAction.JOIN_SESSION,
     };
     this.ws.send(JSON.stringify(packet));
@@ -60,7 +60,7 @@ export class Connect4Client {
   makeMove(column: number) {
     const packet: ClientPacket = {
       session: this.session,
-      user: this.user,
+      user: this.username,
       action: ClientAction.MOVE,
       column: column,
     };
@@ -70,7 +70,7 @@ export class Connect4Client {
   quit() {
     const packet: ClientPacket = {
       session: this.session,
-      user: this.user,
+      user: this.username,
       action: ClientAction.QUIT,
     };
     this.ws.send(JSON.stringify(packet));
