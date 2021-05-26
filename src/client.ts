@@ -129,6 +129,7 @@ export class Connect4Client {
         break;
       case ServerAction.SESSION_NOT_FOUND:
         this.sessionNotFoundCallback?.();
+        break;
       case ServerAction.OPPONENT_JOIN:
         this.onOpponentJoinCallback?.(packet.user);
         break;
