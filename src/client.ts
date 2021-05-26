@@ -85,7 +85,7 @@ export class Connect4Client {
     this.sessionCreatedCallback = callback;
   }
 
-  onJoinedSession(callback: (opponentUsername: string) => any): void {
+  onSessionJoined(callback: (opponentUsername: string) => any): void {
     this.joinedSessionCallback = callback;
   }
 
