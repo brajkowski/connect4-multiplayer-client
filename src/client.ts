@@ -37,8 +37,8 @@ export class Connect4Client {
     this.ws.close();
   }
 
-  createSession(user: string) {
-    this.username = user;
+  createSession(username: string) {
+    this.username = username;
     const packet: ClientPacket = {
       user: this.username,
       action: ClientAction.CREATE_SESSION,
@@ -46,9 +46,9 @@ export class Connect4Client {
     this.ws.send(JSON.stringify(packet));
   }
 
-  joinSession(session: string, user: string) {
+  joinSession(session: string, username: string) {
     this.sessionName = session;
-    this.username = user;
+    this.username = username;
     const packet: ClientPacket = {
       session: this.sessionName,
       user: this.username,
