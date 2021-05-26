@@ -7,7 +7,7 @@ import {
 
 export class Connect4Client {
   private ws: WebSocket;
-  private session: string;
+  private sessionName: string;
   private username: string;
   private onOpenCallback?: () => any;
   private sessionCreatedCallback?: (sessionName: string) => any;
@@ -47,10 +47,10 @@ export class Connect4Client {
   }
 
   joinSession(session: string, user: string) {
-    this.session = session;
+    this.sessionName = session;
     this.username = user;
     const packet: ClientPacket = {
-      session: this.session,
+      session: this.sessionName,
       user: this.username,
       action: ClientAction.JOIN_SESSION,
     };
@@ -59,7 +59,7 @@ export class Connect4Client {
 
   makeMove(column: number) {
     const packet: ClientPacket = {
-      session: this.session,
+      session: this.sessionName,
       user: this.username,
       action: ClientAction.MOVE,
       column: column,
@@ -69,7 +69,7 @@ export class Connect4Client {
 
   quit() {
     const packet: ClientPacket = {
-      session: this.session,
+      session: this.sessionName,
       user: this.username,
       action: ClientAction.QUIT,
     };
@@ -121,8 +121,8 @@ export class Connect4Client {
     const packet: ServerPacket = JSON.parse(data.toString());
     switch (packet.action) {
       case ServerAction.SESSION_CREATED:
-        this.session = packet.newSession;
-        this.sessionCreatedCallback?.(this.session);
+        this.sessionName = packet.newSession;
+        this.sessionCreatedCallback?.(this.sessionName);
         break;
       case ServerAction.JOINED_SESSION:
         this.joinedSessionCallback?.(packet.user);
