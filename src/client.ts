@@ -7,12 +7,12 @@ import {
 
 export class Connect4Client {
   private ws: WebSocket;
-  private session: string;
-  private user: string;
+  private sessionName: string;
+  private username: string;
   private onOpenCallback?: () => any;
-  private sessionCreatedCallback?: (sessionName: string) => any;
-  private joinedSessionCallback?: (opponentUsername: string) => any;
-  private sessionNotFoundCallback?: () => any;
+  private onSessionCreatedCallback?: (sessionName: string) => any;
+  private onSessionJoinedCallback?: (opponentUsername: string) => any;
+  private onSessionNotFoundCallback?: () => any;
   private onOpponentJoinCallback?: (username: string) => any;
   private onOpponentMoveCallback?: (column: number) => any;
   private onOpponentQuitCallback?: () => any;
@@ -37,21 +37,21 @@ export class Connect4Client {
     this.ws.close();
   }
 
-  createSession(user: string) {
-    this.user = user;
+  createSession(username: string) {
+    this.username = username;
     const packet: ClientPacket = {
-      user: this.user,
+      user: this.username,
       action: ClientAction.CREATE_SESSION,
     };
     this.ws.send(JSON.stringify(packet));
   }
 
-  joinSession(session: string, user: string) {
-    this.session = session;
-    this.user = user;
+  joinSession(sessionName: string, username: string) {
+    this.sessionName = sessionName;
+    this.username = username;
     const packet: ClientPacket = {
-      session: this.session,
-      user: this.user,
+      session: this.sessionName,
+      user: this.username,
       action: ClientAction.JOIN_SESSION,
     };
     this.ws.send(JSON.stringify(packet));
@@ -59,8 +59,8 @@ export class Connect4Client {
 
   makeMove(column: number) {
     const packet: ClientPacket = {
-      session: this.session,
-      user: this.user,
+      session: this.sessionName,
+      user: this.username,
       action: ClientAction.MOVE,
       column: column,
     };
@@ -69,8 +69,8 @@ export class Connect4Client {
 
   quit() {
     const packet: ClientPacket = {
-      session: this.session,
-      user: this.user,
+      session: this.sessionName,
+      user: this.username,
       action: ClientAction.QUIT,
     };
     this.ws.send(JSON.stringify(packet));
@@ -82,15 +82,15 @@ export class Connect4Client {
   }
 
   onSessionCreated(callback: (sessionName: string) => any): void {
-    this.sessionCreatedCallback = callback;
+    this.onSessionCreatedCallback = callback;
   }
 
-  onJoinedSession(callback: (opponentUsername: string) => any): void {
-    this.joinedSessionCallback = callback;
+  onSessionJoined(callback: (opponentUsername: string) => any): void {
+    this.onSessionJoinedCallback = callback;
   }
 
   onSessionNotFound(callback: () => any): void {
-    this.sessionNotFoundCallback = callback;
+    this.onSessionNotFoundCallback = callback;
   }
 
   onOpponentJoin(callback: (username: string) => any): void {
@@ -121,14 +121,15 @@ export class Connect4Client {
     const packet: ServerPacket = JSON.parse(data.toString());
     switch (packet.action) {
       case ServerAction.SESSION_CREATED:
-        this.session = packet.newSession;
-        this.sessionCreatedCallback?.(this.session);
+        this.sessionName = packet.newSession;
+        this.onSessionCreatedCallback?.(this.sessionName);
         break;
       case ServerAction.JOINED_SESSION:
-        this.joinedSessionCallback?.(packet.user);
+        this.onSessionJoinedCallback?.(packet.user);
         break;
       case ServerAction.SESSION_NOT_FOUND:
-        this.sessionNotFoundCallback?.();
+        this.onSessionNotFoundCallback?.();
+        break;
       case ServerAction.OPPONENT_JOIN:
         this.onOpponentJoinCallback?.(packet.user);
         break;
