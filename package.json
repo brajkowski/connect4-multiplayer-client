@@ -37,9 +37,9 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/ws": "^7.4.7",
+    "@types/ws": "^8.5.2",
     "rimraf": "^3.0.2",
-    "semantic-release": "^17.4.7",
+    "semantic-release": "^19.0.2",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
   },
